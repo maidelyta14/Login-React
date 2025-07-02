@@ -5,7 +5,7 @@ export const loginUser = createAsyncThunk('auth/login', async (credentials, thun
   try {
     const user = await authenticateUser(credentials);
     if (!user) {
-      throw new Error('Credenciales inválidas');
+      return thunkAPI.rejectWithValue('Credenciales inválidas');
     }
     return user;
   } catch (error) {
