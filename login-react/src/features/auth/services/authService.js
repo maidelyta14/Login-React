@@ -1,20 +1,24 @@
-const API_URL = 'https://api.escuelajs.co/api/v1';
+const API_URL = 'https://api.escuelajs.co/api/v1/users';
 
-export const authenticateUser = async ({ email, password }) => {
-    const validUser = {
-        id: 1,
-        name: 'John Doe',
-        email: 'john@mail.com',
-        password: 'badbunny',
-        role: 'admin',
-        avatar: 'https://i.pravatar.cc/150?img=1'
-    };
+export const authenticateUser = async ({ email }) => {
+    const response = await fetch(API_URL);
 
-    if (email === validUser.email && password === validUser.password) {
-        const { password, ...userWithoutPassword } = validUser;
-        return userWithoutPassword;
+    if (!response.ok) {
+        throw new Error('Error al conectar con el servidor');
+    }
+
+    const users = await response.json();
+    const user = users.find(u => u.email === email);
+
+    if (user) {
+        return {
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            role: user.role,
+            avatar: user.avatar
+        };
     }
 
     return null;
 };
-
